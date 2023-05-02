@@ -10,7 +10,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-style: Epilouge;
+  overflow: visible;
+  background-size: cover;
 }
+
+
 
 code {
   font-family: Helvetica;
@@ -49,16 +53,15 @@ code {
   color: #565E6CFF;
   /* neutral-600 */
   text-align: left;
-  overflow: hidden;
+  /* overflow: hidden; */
   margin-top: 5px;
   margin-top: 5px;
 }
 
-#gstValues {
-  margin-top: -20px;
-  margin-top: -50px;
+.gst-col{
+  margin-top: -25px;
+  margin-bottom: -5px;
 }
-
 .product-form-input {
   flex: 1;
   width: 390px;
@@ -118,7 +121,7 @@ code {
   border: 1px solid gray;
   background: #F3F4F6FF;
   box-sizing: border-box;
-  width: 400px;
+  width: 335px;
   margin-right: 10px;
   border-radius: 5px;
 }
@@ -126,12 +129,12 @@ code {
 .product-form-inputs-5 {
   float: left;
   flex: 1;
-  height: 100%;
+  height: 45px;
   font-size: 14px;
   border: 1px solid gray;
   background: #F3F4F6FF;
   box-sizing: border-box;
-  width: 30px;
+  width: 132px;
   margin-right: 10px;
   margin-top: 5px;
   border-radius: 5px;
@@ -154,6 +157,7 @@ code {
   font-size: 15px;
   line-height: 30px;
   color: #565E6CFF;
+  margin-top: 7px;
 }
 
 /* Button 1 */
@@ -208,6 +212,48 @@ img {
   margin-top: 3vh;
   height: 3vw;
 }
+.popup{
+  position: absolute; 
+  top: 320px; 
+  left: 540px; 
+  width: 560px; 
+  height: 114px; 
+  background: #FFFFFFFF; 
+  border-radius: 6px; 
+  box-shadow: 0px 4px 9px #171a1f, 0px 0px 2px #171a1f;
+  justify-content: center;
+}
+.error-msg{
+  margin-top: 20px;
+  font-family: Arial, Helvetica, sans-serif; 
+  font-size: 14px; 
+  line-height: 22px; 
+  color: #171A1FFF; 
+  text-align: center;
+}
+.cancel-btn{
+  margin-left: 450px;
+  align-items: right; 
+  justify-content: center; 
+  font-family: Arial, Helvetica, sans-serif; 
+  font-size: 14px; 
+  line-height: 22px; 
+  color: #FFFFFFFF; 
+  background: #00BDD6FF; 
+  opacity: 1; 
+  border: none; 
+  border-radius: 4px; 
+}
+.popup::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #F5F5F5;
+  z-index: -1;
+}
 
 .logo {
   width: 100vx;
@@ -224,6 +270,7 @@ img {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   height: 5 vw;
   width: 100%;
+  overflow: visible;
 }
 
 .logo {
@@ -260,18 +307,19 @@ img {
 
 .formFields {
   display: flex;
-  margin-top: 10px;
+  /* margin-top: 10px; */
 }
 
 .productDetails {
-  margin-left: 400px;
+  /* margin-left: 400px; */
   margin-bottom: 20px;
   font-family: Helvetica;
   /* Heading */
   font-size: 32px;
   line-height: 48px;
   color: #171A1FFF;
-  /* neutral-900 */
+  text-align: center;
+   /* neutral-900 */
 }
 
 /* Set font family and font size for placeholder */
@@ -373,23 +421,29 @@ input::placeholder {
 }
 
 .radio {
-  display: flex;
-  margin-left: 25px;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.radioButons {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-row-gap: 4px;
+  align-items: center;
 }
 
 .radio-item {
-  float: left;
-  flex: 1 0 33%;
+  margin-right: 5px;
 }
 
-.radio-item:last-child {
-  flex-grow: 0;
+#weightDimensions{
+  width: 60px;
+  height: 47px;
+  font-size: 14px;
+  background: #F3F4F6FF;
+  margin-right: 10px;
+}
+#measurementDimensions{
+  width: 60px;
+  height: 47px;
+  font-size: 14px;
+  background: #F3F4F6FF;
+  margin-right: 10px; 
 }
 
 #add {
@@ -407,7 +461,7 @@ input::placeholder {
 }
 
 .shipmentOptions {
-  width: 30%;
+  width: 100%;
   height: 2.5rem;
 }
 
@@ -436,7 +490,7 @@ table {
 
 table {
   border: 2px solid #ddd;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 table th,
@@ -455,6 +509,7 @@ table th {
   font-size: 16px; 
   line-height: 22px; 
   color: #565E6CFF;
+  text-align: center;
 }
 /* table tbody tr:nth-child(odd) {
   background-color: #f9f9f9;
@@ -510,13 +565,15 @@ table tbody tr:hover {
 }
 
 .tableHeading {
-  margin-left: 425px;
+  margin-left: 30%;
   width: 712px;
   font-family: Helvetica;
   font-size: 25px;
   line-height: 33px;
   color: #171A1FFF;
   margin-top: 50px;
+  display: flex;
+  /* text-align: center; */
 }
 
 .one {
@@ -535,4 +592,195 @@ margin-bottom: 10px; */
   display: flex;
   /* margin-top: 20px;
 margin-bottom: 10px; */
+}
+.four{
+  width: 425px;
+  height: 70px;
+  box-sizing: border-box;
+  display: flex;
+  /* background-color: red;  */
+}
+@media (max-width:1450px) {
+  /* .inputLabels {
+    display: none;
+  } */
+  .formFields{
+    display: block;
+   }
+   .submitButton{
+    margin-left: 0px;
+   }
+   .productDetails{
+    margin-left: 10rem;
+   }
+   .tableHeading {
+    margin-left: 10rem;
+  }
+ 
+}
+
+@media (max-width: 768px) {
+  .formFields{
+    margin-top: 0px;
+    margin-left: -20px;
+  }
+  .product-form-input {
+    flex: 1;
+    width: 320px;
+    height: 25px;
+    padding: 10px;
+    /* margin-top: 5px; */
+    border: 1px solid gray;
+    font-size: 14px;
+    background: #F3F4F6FF;
+    border-radius: 5px;
+    
+  }
+  .productDetails{
+    text-align: center;
+    font-size: 22px;
+  }
+  .header{
+    width: 120%;
+  }
+  .product-form-input-2 {
+    flex: 1;
+    width: 250px;
+    height: 25px;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid gray;
+    font-size: 14px;
+    background: #F3F4F6FF;
+    margin-right: 2px;
+    border-radius: 5px;
+    /* margin-bottom: 5px; */
+  }
+  
+  .product-form-input-3 {
+    float: left;
+    flex: 1;
+    height: 100%;
+    font-size: 14px;
+    border: 1px solid gray;
+    background: #F3F4F6FF;
+    box-sizing: border-box;
+    width: 50px;
+    margin-right: 10px;
+    border-radius: 5px;
+  }
+  
+  .product-form-input-end {
+    float: left;
+    flex: 1;
+    height: 100%;
+    font-size: 14px;
+    border: 1px solid gray;
+    background: #F3F4F6FF;
+    box-sizing: border-box;
+    width: 50px;
+    border-radius: 5px;
+  }
+  
+  .product-form-input-4 {
+    float: left;
+    flex: 1;
+    height: 100%;
+    font-size: 14px;
+    border: 1px solid gray;
+    background: #F3F4F6FF;
+    box-sizing: border-box;
+    width: 50px;
+    margin-right: 10px;
+    border-radius: 5px;
+  }
+  
+  .product-form-inputs-5 {
+    float: left;
+    flex: 1;
+    height: 45px;
+    font-size: 14px;
+    border: 1px solid gray;
+    background: #F3F4F6FF;
+    box-sizing: border-box;
+    width: 110px;
+    margin-right: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+  }
+  
+  .measurementDimensions {
+    width: 20px;
+    height: 100%;
+    font-size: 14px;
+    background: #F3F4F6FF;
+    margin-right: 5px;
+    float: left;
+    /* margin-bottom: 30px; */
+  }
+  select {
+    width: 345px;
+    height: 47px;
+    /* margin-bottom: 30px; */
+    font-size: 14px;
+    background: #F3F4F6FF;
+    font-family: Helvetica;
+    color: gray;
+    font-size: 14px;
+    flex: 1;
+    border-radius: 5px;
+  }
+.one{
+  width: 360px;
+}
+.two{
+  width: 350px;
+}
+.four{
+  width: 305px;
+  height: 70px;
+  box-sizing: border-box;
+  display: flex;
+}
+.social-media{
+  display: none;
+}
+.inputLabels{
+  font-size: 16px;
+  margin-top: 0px;
+}
+.shipmentOptions{
+  padding-left: 5px;
+}
+.radio {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+}
+
+.radio-item {
+  margin-right: 0px;
+}
+
+.shipmentOptions {
+  margin-left: 5px;
+}
+
+.sidep{
+  margin-bottom: 0px;
+  font-size: 14px;
+}
+.popup{
+  position: absolute; 
+  top: 414px; 
+  left: 35px; 
+  width: 398px; 
+  height: 138px; 
+  background: #FFFFFFFF; 
+  border-radius: 6px; 
+  box-shadow: 0px 4px 9px #171a1f, 0px 0px 2px #171a1f; 
+}
+.cancel-btn{
+  margin-left: 300px;
+}
 }
