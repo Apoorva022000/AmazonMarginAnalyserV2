@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './index.css';
 // import Header from './header';
 
 function Form() {
-  const [easyShipPrimeTable, seteasyShipPrimeTable] = useState(false);
-  const [showAdditionalShippingCost, setShowAdditionalShippingCost] = useState(false);
+   const [showAdditionalShippingCost, setShowAdditionalShippingCost] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [showPopupTwo, setShowPopupTwo] = useState(false);
   const [formValues, setFormValues] = useState({
     costPrice: '',
     sellingPrice: '',
@@ -80,7 +81,9 @@ function Form() {
       payload.height = (formValues.height * 2.54).toString();
     }
 
-
+    if (formValues.shippingOption === "Easy Ship Prime") {
+      payload.shippingOption = "Easy Ship";
+    }
     try {
       const response = await fetch(`https://marginanalyse.azurewebsites.net/api/marginv1?costPrice=${payload.costPrice}&sellingPrice=${payload.sellingPrice}&gstRate=${payload.gstRate}&discount=${payload.discount}&length=${payload.length}&breadth=${payload.breadth}&height=${payload.height}&packingWeight=${payload.packingWeight}&categoryUnit=${payload.categoryUnit}&tierUnit=${payload.tierUnit}&shippingOption=${payload.shippingOption}&localShippingCost=${payload.localShippingCost}&regionalShippingCost=${payload.regionalShippingCost}&nationalShippingCost=${payload.nationalShippingCost}`, {
         method: 'POST',
@@ -106,12 +109,26 @@ function Form() {
       [e.target.name]: e.target.value,
     });
     setSubmitted(true);
+    const target = document.getElementById('tableWrapper');
+    target.scrollIntoView({ behavior: 'smooth' });
+
   };
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-
+    if ((name === "costPrice" && value < 0)|| (name=== "sellingPrice" && value < 0)||(name=== "length" && value < 0)||(name=== "breadth" && value < 0)|| (name=== "height" && value < 0)||(name=== "packingWeight" && value < 0)) {
+      setShowPopup(true);
+    } else {
+      setShowPopup(false);
+    }
+          if(formValues.percentOrValue==="percentValue" && (name==="discount"&& value>80)){
+      setShowPopupTwo(true);
+    }
+    else{
+      setShowPopupTwo(false);
+    }
+  
     setFormValues({
       ...formValues,
       [name]: value,
@@ -119,11 +136,11 @@ function Form() {
 
 
     if (name === "shippingOption") {
-      setShowAdditionalShippingCost(value === "Easy Ship");
+      setShowAdditionalShippingCost(value === "Easy Ship" || value === "Easy Ship Prime");
     }
-    if (name === "shippingOption" && formValues.shippingOption == "Easy Ship Prime") {
-      [easyShipPrimeTable, seteasyShipPrimeTable] = true;
-    }
+    // if (name === "shippingOption" && formValues.shippingOption === "Easy Ship Prime") {
+    //   [easyShipPrimeTable, seteasyShipPrimeTable] = true;
+    // }
 
 
 
@@ -141,10 +158,13 @@ function Form() {
 
   };
 
-
+  const handleCancel = () => {
+ setShowPopup(false);
+setShowPopupTwo(false);
+  };
   return (
     <div>
-          <div className='productName'>
+      <div className='productName'>
         <h1 className='productDetails'>Product Information</h1>
       </div>
       <form onSubmit={handleSubmit} className='product-form'>
@@ -161,16 +181,18 @@ function Form() {
           </div>
         </div>
         <br></br>
-        <div className='formFields'>
-          <label className='inputLabels' >Product GST <br /> <p className='sidep'>GST Rate</p></label>
-          <div className=''>
-            <select className='' id="gstValues" name="gstRate" value={formValues.gstRate} onChange={handleChange} required>
-              <option value="0.00">0%</option>
-              <option value="0.05">5%</option>
-              <option value="0.12">12%</option>
-              <option value="0.18">18%</option>
-              <option value="0.28">28%</option>
-            </select>
+        <div className='gst-col'>
+          <div className='formFields'>
+            <label className='inputLabels' >Product GST <br /> <p className='sidep'>GST Rate</p></label>
+            <div className=''>
+              <select className='' id="gstValues" name="gstRate" value={formValues.gstRate} onChange={handleChange} required>
+                <option value="0.00">0%</option>
+                <option value="0.05">5%</option>
+                <option value="0.12">12%</option>
+                <option value="0.18">18%</option>
+                <option value="0.28">28%</option>
+              </select>
+            </div>
           </div>
         </div>
         <div className='formFields'>
@@ -193,15 +215,15 @@ function Form() {
         <div className='formFields'>
           <label className='inputLabels' >Packaging Dimensions<br /> <p className='sidep'>Length, Width & Height</p></label>
           <div className='two'>
-            <select className='measurementDimensions' id='measurementDimensions'
-              value={formValues.measurementDimensions}
-              onChange={handleChange}
-              name="measurementDimensions"
-              required
-            >
-              <option value="cm">cm</option>
-              <option value="inch">inch</option>
-            </select>
+          <select className='' id='measurementDimensions'
+                value={formValues.measurementDimensions}
+                onChange={handleChange}
+                name="measurementDimensions"
+                required
+              >
+                <option value="cm">cm</option>
+                <option value="inch">inch</option>
+              </select>
             <label className='form-label'>L </label>
             <input className='product-form-input-3' type="number" id="length" name="length" value={formValues.length} placeholder="" onChange={handleChange} required />
             <label className='form-label'>W </label>
@@ -211,19 +233,20 @@ function Form() {
           </div>
         </div>
         <div className='formFields'>
-          <label className='inputLabels'>Packaging Weight<br /> <p className='sidep'>Net Weight</p></label>
-
+          <label className='inputLabels'>Packaging Weight<br /> <p className='sidep'>Nett Weight</p></label>
           <div className='one'>
-            <select className='measurementDimensions' id='weightDimensions'
-              value={formValues.weightDimension}
-              name="weightDimensions"
-              onChange={handleChange}
-              required
-            >
-              <option value="g">g</option>
-              <option value="kg">kg</option>
-            </select>
-            <input className='product-form-input-4' type="number" id="packingWeight" name="packingWeight" value={formValues.packingWeight} placeholder="" onChange={handleChange} required />
+            <div>
+              <select className='' id='weightDimensions'
+                value={formValues.weightDimensions}
+                onChange={handleChange}
+                name="weightDimensions"
+                required
+              >
+                <option value="g">g</option>
+                <option value="kg">kg</option>
+              </select>
+              <input className='product-form-input-2' type="text" id="packingWeight" name="packingWeight" value={formValues.packingWeight} placeholder="" onChange={handleChange} required />
+            </div>
           </div>
         </div>
         <div className='formFields'>
@@ -272,7 +295,6 @@ function Form() {
               <option value="Apparel - Sarees  & Dress Materials">Apparel - Sarees and Dress Materials</option>
               <option value="Apparel - Sweat Shirts and Jackets">Apparel - Sweat Shirts and Jackets</option>
               <option value="Apparel - Other Innerwear">Apparel - Other Innerwear</option>
-              <option value="Apparel - Men's T-shirts (except Polos, Tank tops and full sleeve tops)">Apparel - Men's T-shirts (except Polos, Tank tops and full sleeve tops)</option>
               <option value="Apparel - Womens' Innerwear and Lingerie">Apparel - Womens' Innerwear and Lingerie</option>
               <option value="Apparel - Men's T-Shirts (Excluding Tank Tops and Full Sleeve Tops)">Apparel - Men's T-Shirts (Excluding Tank Tops and Full Sleeve Tops)</option>
               <option value="Apparel - Sleepwear">Apparel - Sleepwear</option>
@@ -434,7 +456,7 @@ function Form() {
                 checked={formValues.shippingOption === "Self Ship"}
                 onChange={handleChange}
               />
-              <label htmlFor="Self Ship">Self ship</label>
+              <label className="shipmentOptions" htmlFor="Self Ship">Self ship</label>
             </div>
             <div>
               <input className='radio-item'
@@ -445,16 +467,6 @@ function Form() {
                 onChange={handleChange}
               />
               <label className="shipmentOptions" htmlFor='easyshipprime'>Easy Ship</label>
-            </div>
-            <div >
-              <input className='radio-item'
-                type="radio"
-                name="shippingOption"
-                value="Easy Ship Prime"
-                checked={formValues.shippingOption === "Easy Ship"}
-                onChange={handleChange}
-              />
-              <label className="shipmentOptions" htmlFor='easyship'>Easy Ship Prime</label>
             </div>
             <div>
 
@@ -467,6 +479,16 @@ function Form() {
               />
               <label className="shipmentOptions" htmlFor='FBA'>FBA</label>
             </div>
+            <div >
+              <input className='radio-item'
+                type="radio"
+                name="shippingOption"
+                value="Easy Ship Prime"
+                checked={formValues.shippingOption === "Easy Ship Prime"}
+                onChange={handleChange}
+              />
+              <label className="shipmentOptions" htmlFor='easyship'>Easy Ship Prime</label>
+            </div>
             <div>
               <input className='radio-item'
                 type="radio"
@@ -478,53 +500,81 @@ function Form() {
               <label htmlFor='sellerflex'>Seller Flex</label>
             </div>
           </div>
+
         </div>
 
         {
           showAdditionalShippingCost ? (
             <div id='additionalShippingCost' className='additionalShippingCost'>
-              <div className='titles'>
+
+              {/* <div className='titles'>
                 <p className='para'>Local</p>
                 <p className='para'>Regional</p>
                 <p className='para'>National</p>
-              </div>           
-                <div className='formFields'>
+              </div> */}
+              <div className='formFields'>
                 <label className='inputLabels'> Additional Shipping Costs <br /> <p className='sidep'>Seller Shipping Cost If Any</p> </label>
-                  <div className='one'>
-                    <input className='product-form-inputs-5'
-                      name="localShippingCost"
-                      type="number"
-                      placeholder="&#8377;"
-                      value={formValues.localShippingCost}
-                      onChange={handleChange}
-                    />
-
-
-                    <input className='product-form-inputs-5'
-                      name="regionalShippingCost"
-                      type="number"
-                      placeholder="&#8377;"
-                      value={formValues.regionalShippingCost}
-                      onChange={handleChange}
-                    />
-
-                    <input className='product-form-inputs-5'
-                      name="nationalShippingCost"
-                      type="number"
-                      placeholder="&#8377;"
-                      value={formValues.nationalShippingCost}
-                      onChange={handleChange}
-                    />
+                <div className='four'>
+                  <div className='three'>
+                    <div>
+                      <label className='ship'>Local</label>
+                      <div>
+                        <input className='product-form-inputs-5'
+                          name="localShippingCost"
+                          type="number"
+                          placeholder="&#8377;"
+                          value={formValues.localShippingCost}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label className='ship'>Regional</label>
+                    <div>
+                      <input className='product-form-inputs-5'
+                        name="regionalShippingCost"
+                        type="number"
+                        placeholder="&#8377;"
+                        value={formValues.regionalShippingCost}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className='ship'>National</label>
+                    <div>
+                      <input className='product-form-inputs-5'
+                        name="nationalShippingCost"
+                        type="number"
+                        placeholder="&#8377;"
+                        value={formValues.nationalShippingCost}
+                        onChange={handleChange}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-           
+            </div>
+
 
 
           ) : null
         }
         <button type="submit" className='submitButton'>Generate Margin Analysis</button>
       </form >
+      {showPopup && (
+  <div className="popup">
+    <p className='error-msg'>Please enter a valid input. The allowed values are positive integers</p>
+    <button className='cancel-btn'  onClick={handleCancel}> Cancel</button>
+  </div>
+)}
+      {showPopupTwo && (
+  <div className="popup">
+    <p className='error-msg'>Please enter a valid input. The allowed discount range is from 1% to 80%</p>
+    <button className='cancel-btn'  onClick={handleCancel}> Cancel</button>
+  </div>
+)}
       <div>
         {submitted &&
           <div className='tableWrapper'>
